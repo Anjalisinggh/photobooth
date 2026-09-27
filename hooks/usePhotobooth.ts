@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { composeStrip } from "@/lib/photoProcessing";
+import { applyFilterToImage, composeStrip, loadImage } from "@/lib/photoProcessing";
 import { saveSession as persistSession } from "@/lib/storage";
 import { playCompletionChime, playShutterSound } from "@/lib/sound";
 import {
@@ -55,6 +55,7 @@ interface UsePhotoboothResult {
   regenerateStrip: (override?: StripCustomization) => Promise<void>;
   saveToLibrary: () => Promise<string | null>;
   savedSessionId: string | null;
+  importPhotos: (files: File[]) => Promise<void>;
 }
 
 export function usePhotobooth({ captureFrame }: UsePhotoboothArgs): UsePhotoboothResult {
@@ -150,6 +151,50 @@ export function usePhotobooth({ captureFrame }: UsePhotoboothArgs): UsePhotoboot
     setCustomization(defaultCustomization());
   }, []);
 
+  const importPhotos = useCallback(
+    async (files: File[]) => {
+      const selected = files.slice(0, PHOTOS_PER_SESSION);
+      if (selected.length === 0) return;
+
+      const token = ++runTokenRef.current;
+      setPhotos([]);
+      setStripDataUrl(null);
+      setSavedSessionId(null);
+      setPhotoIndex(0);
+      setStage("generating");
+
+      const activeFilter = getFilter(filter);
+      const captured: CapturedPhoto[] = [];
+
+      for (const file of selected) {
+        if (runTokenRef.current !== token) return;
+        const objectUrl = URL.createObjectURL(file);
+        try {
+          const img = await loadImage(objectUrl);
+          if (runTokenRef.current !== token) return;
+          const dataUrl = applyFilterToImage(img, activeFilter);
+          captured.push({ id: crypto.randomUUID(), dataUrl, takenAt: Date.now() });
+          setPhotos([...captured]);
+        } finally {
+          URL.revokeObjectURL(objectUrl);
+        }
+      }
+
+      if (runTokenRef.current !== token || captured.length === 0) return;
+      const finalCustomization: StripCustomization = { ...customization, filter };
+      setCustomization(finalCustomization);
+      const strip = await composeStrip(
+        captured.map((p) => p.dataUrl),
+        finalCustomization
+      );
+      if (runTokenRef.current !== token) return;
+      setStripDataUrl(strip);
+      setStage("reviewing");
+      playCompletionChime();
+    },
+    [filter, customization]
+  );
+
   const regenerateStrip = useCallback(
     async (override?: StripCustomization) => {
       if (photos.length === 0) return;
@@ -202,5 +247,6 @@ export function usePhotobooth({ captureFrame }: UsePhotoboothArgs): UsePhotoboot
     regenerateStrip,
     saveToLibrary,
     savedSessionId,
+    importPhotos,
   };
 }

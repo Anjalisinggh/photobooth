@@ -40,6 +40,32 @@ function makeCanvas(w: number, h: number): { canvas: HTMLCanvasElement; ctx: Can
   return { canvas, ctx };
 }
 
+/**
+ * Bakes a filter (+ optional overlay/grain) onto an already-loaded image, the
+ * same way `capturePhotoFromVideo` does for a live camera frame — used for
+ * photos a user picks from their own gallery instead of the camera.
+ */
+export function applyFilterToImage(img: HTMLImageElement, filter: FilterDefinition): string {
+  const w = img.naturalWidth || img.width;
+  const h = img.naturalHeight || img.height;
+  const { canvas, ctx } = makeCanvas(w, h);
+
+  ctx.save();
+  ctx.filter = filter.cssFilter;
+  ctx.drawImage(img, 0, 0, w, h);
+  ctx.restore();
+
+  if (filter.overlay) {
+    ctx.fillStyle = filter.overlay;
+    ctx.fillRect(0, 0, w, h);
+  }
+  if (filter.grain) {
+    applyGrain(ctx, w, h, 0.06);
+  }
+
+  return canvas.toDataURL("image/jpeg", 0.92);
+}
+
 /** Adds a light procedural film-grain layer on top of whatever is currently drawn. */
 function applyGrain(ctx: CanvasRenderingContext2D, w: number, h: number, intensity = 0.05): void {
   const { canvas: noiseCanvas, ctx: noiseCtx } = makeCanvas(w, h);

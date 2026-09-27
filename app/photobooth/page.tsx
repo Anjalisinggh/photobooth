@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Camera from "@/components/Camera";
 import FilterSelector from "@/components/FilterSelector";
 import PhotoPreview from "@/components/PhotoPreview";
@@ -27,6 +27,7 @@ export default function PhotoboothPage() {
   const camera = useCamera();
   const [flashEnabled, setFlashEnabled] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
   const captureFrame = useCallback(
     (filter: FilterDefinition) => {
@@ -62,6 +63,15 @@ export default function PhotoboothPage() {
     await booth.saveToLibrary();
     setIsSaving(false);
   }, [booth]);
+
+  const handleGalleryChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files ?? []);
+      e.target.value = "";
+      if (files.length > 0) void booth.importPhotos(files);
+    },
+    [booth]
+  );
 
   const isResultStage = booth.stage === "reviewing" || booth.stage === "saved";
   const isSessionRunning =
@@ -115,27 +125,44 @@ export default function PhotoboothPage() {
               {isSessionRunning ? (
                 <PhotoPreview photos={booth.photos} total={booth.totalPhotos} />
               ) : (
-                camera.status === "ready" && (
-                  <>
-                    <div>
-                      <h2 className="mb-3 text-center font-label text-xs font-semibold uppercase tracking-[0.2em] text-ink/60">
-                        pick a style
-                      </h2>
-                      <FilterSelector
-                        value={booth.filter}
-                        onChange={booth.setFilter}
-                        stream={camera.stream}
-                        mirror={camera.isMirrored}
-                      />
-                    </div>
+                <>
+                  <div>
+                    <h2 className="mb-3 text-center font-label text-xs font-semibold uppercase tracking-[0.2em] text-ink/60">
+                      pick a style
+                    </h2>
+                    <FilterSelector
+                      value={booth.filter}
+                      onChange={booth.setFilter}
+                      stream={camera.stream}
+                      mirror={camera.isMirrored}
+                    />
+                  </div>
 
-                    <div className="flex justify-center">
-                      <TactileButton onClick={() => void booth.startSession()} variant="primary">
-                        Start session
-                      </TactileButton>
-                    </div>
-                  </>
-                )
+                  <div className="flex flex-col items-center gap-3">
+                    {camera.status === "ready" && (
+                      <>
+                        <TactileButton onClick={() => void booth.startSession()} variant="primary">
+                          Start session
+                        </TactileButton>
+                        <span className="font-hand text-lg text-muted">or</span>
+                      </>
+                    )}
+                    <TactileButton onClick={() => galleryInputRef.current?.click()} variant="secondary">
+                      Upload from gallery
+                    </TactileButton>
+                    <span className="max-w-xs text-center font-body text-xs leading-snug text-muted">
+                      Pick up to {booth.totalPhotos} photos already on your device.
+                    </span>
+                    <input
+                      ref={galleryInputRef}
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      onChange={handleGalleryChange}
+                    />
+                  </div>
+                </>
               )}
             </div>
           </>
