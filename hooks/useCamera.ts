@@ -38,11 +38,17 @@ export function useCamera(): UseCameraResult {
 
   const attachStream = useCallback((nextStream: MediaStream) => {
     streamRef.current = nextStream;
-    if (videoRef.current) {
-      videoRef.current.srcObject = nextStream;
-    }
     setStream(nextStream);
   }, []);
+
+  // The <video> element only mounts once status becomes "ready", which happens
+  // in the same update as `stream` being set — so it isn't in the DOM yet when
+  // attachStream runs. Attach it here instead, once the element actually exists.
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream]);
 
   const startWithFacing = useCallback(
     async (targetFacing: CameraFacing) => {
