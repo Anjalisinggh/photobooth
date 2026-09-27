@@ -86,7 +86,9 @@ export default function PhotoboothPage() {
           </Link>
         </div>
 
-        <p className="mb-6 text-center font-hand text-2xl text-cocoa/80">{STAGE_COPY[booth.stage]}</p>
+        {!isResultStage && (
+          <p className="mb-6 text-center font-hand text-2xl text-cocoa/80">{STAGE_COPY[booth.stage]}</p>
+        )}
 
         {!isResultStage && (
           <>
@@ -141,9 +143,14 @@ export default function PhotoboothPage() {
 
         {isResultStage && (
           <div className="mx-auto max-w-3xl">
-            <h1 className="mb-8 text-center font-display text-4xl font-semibold text-ink sm:text-5xl">
-              Look what we made ✦
-            </h1>
+            <div className="mb-10 text-center">
+              <h1 className="font-script text-6xl leading-none text-ink sm:text-7xl">
+                {booth.stage === "saved" ? "tucked away safely" : "look what we made"}
+              </h1>
+              <p className="mt-3 font-label text-[11px] font-semibold uppercase tracking-[0.3em] text-ink/50">
+                {booth.stage === "saved" ? "saved to my photos ✦" : "fresh out of the printer ✦"}
+              </p>
+            </div>
             <PhotoboothStrip
               stripDataUrl={booth.stripDataUrl}
               customization={booth.customization}

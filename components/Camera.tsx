@@ -4,6 +4,7 @@ import type { RefObject } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Countdown from "@/components/Countdown";
 import FilmGrainOverlay from "@/components/FilmGrainOverlay";
+import StampFrame from "@/components/StampFrame";
 import type { CameraStatus } from "@/hooks/useCamera";
 import type { SessionStage } from "@/hooks/usePhotobooth";
 import { getFilter } from "@/types/photobooth";
@@ -122,9 +123,11 @@ export default function Camera({
               transition={{ type: "spring", stiffness: 260, damping: 20 }}
               className="absolute inset-0 z-30 flex items-center justify-center bg-ink/30"
             >
-              <div className="w-40 rotate-0 rounded-md border-4 border-white bg-white p-1.5 shadow-booth sm:w-48">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={latestPhotoUrl} alt="Just captured" className="aspect-square w-full rounded-sm object-cover" />
+              <div className="w-40 sm:w-48">
+                <StampFrame>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={latestPhotoUrl} alt="Just captured" className="aspect-square w-full object-cover" />
+                </StampFrame>
                 <p className="mt-1 text-center font-hand text-sm text-ink/70">frame {frameNumber}</p>
               </div>
             </motion.div>

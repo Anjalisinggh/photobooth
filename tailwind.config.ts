@@ -5,36 +5,39 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Design system — pastel Y2K / vaporwave desktop palette.
-        paper: "#F4ECFF", // primary background — pale lavender-white
-        cream: "#F4ECFF",
-        panel: "#D8F3E7", // secondary background — pastel mint panel
-        blush: "#FFDCEA", // secondary background alt — soft pink panel
-        ink: "#2E1A47", // primary text / chunky sticker outlines — deep indigo-purple
-        cocoa: "#4B2E83", // deep purple — secondary ink / deep accents
-        muted: "#8E7FAE", // muted text
-        cherry: "#FF5FA2", // primary accent — hot pink/magenta, the "stamp" color
-        rust: "#FF5FA2",
-        butter: "#FFD35C", // accent — golden yellow
-        pink: "#FF8FC7", // sticker color — bubblegum pink
-        sage: "#7FE0C0", // sticker color — bright mint
-        sky: "#8FD8FF", // sticker color — sky blue
-        lavender: "#B79CF0", // sticker color — vivid lavender-purple
-        filmwhite: "#FFFBF5", // photo mat / polaroid border white
+        // Design system — warm cream "paper diary" palette, inspired by a
+        // hand-journaled "today mood" moodboard: textured cream paper, deep
+        // maroon ink-line doodles, postage-stamp photo frames.
+        paper: "#F2E8D8", // primary background — warm cream paper
+        cream: "#FBF5E9", // lighter surface — cards, buttons-on-dark text
+        panel: "#EAD9C4", // secondary background — soft tan panel
+        blush: "#F1D6C9", // secondary background alt — soft terracotta panel
+        ink: "#2B211B", // primary text / outlines — warm near-black
+        cocoa: "#5A3625", // secondary ink — deep coffee brown
+        muted: "#8C7A67", // muted text — warm taupe
+        cherry: "#8A2A2E", // primary accent — deep maroon, the "doodle red"
+        rust: "#8A2A2E",
+        butter: "#D2A15A", // accent — croissant gold
+        pink: "#C98A82", // sticker color — dusty rose
+        sage: "#8FA06B", // sticker color — muted olive
+        sky: "#8FA6B0", // sticker color — dusty blue
+        lavender: "#9C7E6B", // sticker color — warm mocha-mauve
+        filmwhite: "#FFFDF7", // photo mat / stamp border white
       },
       fontFamily: {
         display: ["var(--font-display)", "system-ui", "sans-serif"],
         label: ["var(--font-label)", "system-ui", "sans-serif"],
         hand: ["var(--font-hand)", "cursive"],
+        script: ["var(--font-script)", "cursive"],
         body: ["var(--font-body)", "system-ui", "sans-serif"],
       },
       boxShadow: {
-        film: "0 2px 0 rgba(36,26,18,0.05), 0 18px 36px -18px rgba(36,26,18,0.4)",
-        booth: "0 40px 70px -30px rgba(36,26,18,0.5)",
-        stamp: "3px 3px 0 0 #2E1A47",
-        "stamp-sm": "2px 2px 0 0 #2E1A47",
-        "stamp-lg": "5px 5px 0 0 #2E1A47",
-        tactile: "0 1px 0 rgba(36,26,18,0.15)",
+        film: "0 2px 0 rgba(30,22,16,0.06), 0 18px 36px -18px rgba(30,22,16,0.45)",
+        booth: "0 40px 70px -30px rgba(30,22,16,0.5)",
+        stamp: "3px 3px 0 0 #2B211B",
+        "stamp-sm": "2px 2px 0 0 #2B211B",
+        "stamp-lg": "5px 5px 0 0 #2B211B",
+        tactile: "0 1px 0 rgba(30,22,16,0.18)",
       },
       borderRadius: {
         blob: "255px 15px 225px 15px / 15px 225px 15px 255px",

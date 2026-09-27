@@ -6,34 +6,44 @@ html {
   scroll-behavior: smooth;
 }
 
+:root {
+  /* The flat colour every postage-stamp frame's scalloped edge "bites"
+     into — must match whatever page background the frame sits on. */
+  --stamp-bg: #f2e8d8;
+}
+
 body {
-  background-color: #f4ecff;
-  color: #2e1a47;
+  background-color: #f2e8d8;
+  color: #2b211b;
 }
 
 ::selection {
-  background-color: #2e1a47;
-  color: #f4ecff;
+  background-color: #2b211b;
+  color: #fbf5e9;
 }
 
 /* ---------------------------------------------------------------------- */
-/* Y2K desktop wallpaper — the actual supplied background image, used      */
-/* directly (not redrawn) behind every full page section.                  */
+/* Warm cream "paper diary" background — a textured, hand-journaled page   */
+/* rather than a flat fill: soft tonal blooms + fine grain, no image asset.*/
 /* ---------------------------------------------------------------------- */
 
 .paper-bg {
   position: relative;
-  background-color: #d8c3f5;
-  background-image: url("/bg/wallpaper.png");
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-color: #f2e8d8;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 12% 8%, rgba(255, 253, 247, 0.55), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 88% 92%, rgba(90, 54, 37, 0.06), transparent 65%),
+    radial-gradient(ellipse 40% 35% at 85% 15%, rgba(255, 253, 247, 0.35), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.16, 0 0 0 0 0.11, 0 0 0 0 0.07, 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: cover, cover, cover, 160px 160px;
+  background-position: top left, bottom right, top right, top left;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  background-attachment: fixed, fixed, fixed, scroll;
 }
 
 @media (max-width: 768px) {
   .paper-bg {
-    background-attachment: scroll;
+    background-attachment: scroll, scroll, scroll, scroll;
   }
 }
 
@@ -57,13 +67,72 @@ body {
   display: block;
   background: repeating-linear-gradient(
     45deg,
-    rgba(255, 95, 162, 0.5),
-    rgba(255, 95, 162, 0.5) 6px,
-    rgba(255, 211, 92, 0.45) 6px,
-    rgba(255, 211, 92, 0.45) 12px
+    rgba(138, 42, 46, 0.4),
+    rgba(138, 42, 46, 0.4) 6px,
+    rgba(210, 161, 90, 0.4) 6px,
+    rgba(210, 161, 90, 0.4) 12px
   );
-  box-shadow: 0 1px 2px rgba(46, 26, 71, 0.15);
+  box-shadow: 0 1px 2px rgba(43, 33, 27, 0.18);
   opacity: 0.85;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Postage-stamp photo frame — a white mat whose edge is "perforated" by a  */
+/* ring of small circular bites, each painted the surrounding page colour   */
+/* (--stamp-bg) so it reads as a punched-out scallop rather than a sticker. */
+/* ---------------------------------------------------------------------- */
+
+.stamp-frame {
+  position: relative;
+  background: #fffdf7;
+  padding: 8px;
+  box-shadow:
+    0 1px 0 rgba(43, 33, 27, 0.06),
+    0 16px 30px -18px rgba(43, 33, 27, 0.5);
+}
+
+.stamp-frame__content {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.stamp-frame__edge {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  background-image: radial-gradient(circle at center, var(--stamp-bg) 3.4px, transparent 3.5px);
+}
+
+.stamp-frame__edge--t,
+.stamp-frame__edge--b {
+  left: 6px;
+  right: 6px;
+  height: 8px;
+  background-size: 13px 8px;
+  background-repeat: repeat-x;
+}
+.stamp-frame__edge--t {
+  top: -4px;
+}
+.stamp-frame__edge--b {
+  bottom: -4px;
+}
+
+.stamp-frame__edge--l,
+.stamp-frame__edge--r {
+  top: 6px;
+  bottom: 6px;
+  width: 8px;
+  background-size: 8px 13px;
+  background-repeat: repeat-y;
+}
+.stamp-frame__edge--l {
+  left: -4px;
+}
+.stamp-frame__edge--r {
+  right: -4px;
 }
 
 /* ---------------------------------------------------------------------- */

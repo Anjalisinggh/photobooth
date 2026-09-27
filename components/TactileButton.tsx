@@ -26,9 +26,9 @@ const VARIANT_CLASSES: Record<Variant, string> = {
 };
 
 const press = {
-  rest: { x: 0, y: 0, boxShadow: "3px 3px 0 0 #2E1A47" },
-  hover: { x: -1, y: -1, boxShadow: "4px 4px 0 0 #2E1A47" },
-  tap: { x: 3, y: 3, boxShadow: "0px 0px 0 0 #2E1A47" },
+  rest: { x: 0, y: 0, boxShadow: "3px 3px 0 0 #2B211B" },
+  hover: { x: -1, y: -1, boxShadow: "4px 4px 0 0 #2B211B" },
+  tap: { x: 3, y: 3, boxShadow: "0px 0px 0 0 #2B211B" },
 };
 
 /**

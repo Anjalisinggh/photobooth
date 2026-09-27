@@ -6,6 +6,7 @@ import { clearAllSessions, deleteSession, getAllSessions, isIndexedDbSupported }
 import { downloadDataUrl } from "@/lib/photoProcessing";
 import { getFilter, getLayout, type PhotoboothSession } from "@/types/photobooth";
 import TactileButton from "@/components/TactileButton";
+import StampFrame from "@/components/StampFrame";
 
 function formatDate(ts: number): string {
   return new Date(ts).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" });
@@ -95,20 +96,22 @@ export default function PhotoLibrary() {
                 initial={{ rotate: tilt }}
                 whileHover={{ rotate: 0, y: -8, scale: 1.03 }}
                 transition={{ type: "spring", stiffness: 260, damping: 18 }}
-                className="group relative flex flex-col overflow-hidden rounded-sm border-2 border-white bg-white p-2 pb-4 text-left shadow-film"
+                className="group relative flex flex-col text-left"
               >
                 <span
                   className="tape absolute left-1/2 top-[-8px] z-10 h-5 w-14 -translate-x-1/2 -rotate-2 rounded-sm"
                   aria-hidden
                 />
-                <div className="aspect-square w-full overflow-hidden bg-panel/40">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={session.stripDataUrl}
-                    alt={`Session from ${formatDate(session.createdAt)}`}
-                    className="h-full w-full object-cover object-top"
-                  />
-                </div>
+                <StampFrame>
+                  <div className="aspect-square w-full bg-panel/40">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={session.stripDataUrl}
+                      alt={`Session from ${formatDate(session.createdAt)}`}
+                      className="h-full w-full object-cover object-top"
+                    />
+                  </div>
+                </StampFrame>
                 <div className="space-y-0.5 px-1 pt-2">
                   <p className="font-hand text-lg leading-tight text-ink">{formatDate(session.createdAt)}</p>
                   <p className="font-label text-[9px] uppercase tracking-wide text-ink/45">
@@ -165,8 +168,10 @@ function SessionModal({
           </button>
         </div>
 
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={session.stripDataUrl} alt="Photobooth strip" className="mb-4 w-full rounded-lg border border-ink/10" />
+        <StampFrame className="mb-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={session.stripDataUrl} alt="Photobooth strip" className="w-full" />
+        </StampFrame>
 
         <div className="flex flex-wrap items-center gap-2">
           <TactileButton onClick={() => downloadDataUrl(session.stripDataUrl, `photobooth-strip-${session.id}.jpg`)}>

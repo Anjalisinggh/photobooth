@@ -156,9 +156,9 @@ function drawTape(ctx: CanvasRenderingContext2D, w: number): void {
   ctx.rect(-tapeW / 2, -tapeH / 2, tapeW, tapeH);
   ctx.clip();
   ctx.globalAlpha = 0.8;
-  ctx.fillStyle = "#FFD35C";
+  ctx.fillStyle = "#D2A15A";
   ctx.fillRect(-tapeW / 2, -tapeH / 2, tapeW, tapeH);
-  ctx.fillStyle = "#FF5FA2";
+  ctx.fillStyle = "#8A2A2E";
   const stripe = 9;
   for (let x = -tapeW; x < tapeW; x += stripe * 2) {
     ctx.save();
@@ -186,7 +186,7 @@ function drawStickers(ctx: CanvasRenderingContext2D, w: number, h: number, foote
     { x: size * 0.6, y: footerTop - size * 0.55, align: "center", baseline: "middle", rot: 10 },
     { x: w - size * 0.6, y: footerTop - size * 0.55, align: "center", baseline: "middle", rot: -14 },
   ];
-  const colors = ["#FF5FA2", "#4B2E83", "#7FE0C0"];
+  const colors = ["#8A2A2E", "#5A3625", "#8FA06B"];
 
   stickers.slice(0, 3).forEach((id, i) => {
     const sticker = getSticker(id);
@@ -236,12 +236,12 @@ const CELL = 560;
 function inkFor(background: string): string {
   // Cheap luminance check so caption text stays legible on dark backgrounds.
   const hex = background.replace("#", "");
-  if (hex.length !== 6) return "#2E1A47";
+  if (hex.length !== 6) return "#2B211B";
   const r = parseInt(hex.slice(0, 2), 16);
   const g = parseInt(hex.slice(2, 4), 16);
   const b = parseInt(hex.slice(4, 6), 16);
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance > 0.55 ? "#2E1A47" : "#F4ECFF";
+  return luminance > 0.55 ? "#2B211B" : "#FBF5E9";
 }
 
 async function composeStripLayout(images: HTMLImageElement[], c: StripCustomization): Promise<HTMLCanvasElement> {
@@ -362,7 +362,7 @@ async function composePolaroidLayout(images: HTMLImageElement[], c: StripCustomi
     drawImageCover(ctx, img, cardPad, cardPad, cardW - cardPad * 2, photoH - cardPad);
     ctx.restore();
 
-    ctx.fillStyle = "#2E1A47";
+    ctx.fillStyle = "#2B211B";
     ctx.font = `600 20px "Space Grotesk", Georgia, serif`;
     ctx.textAlign = "center";
     ctx.fillText(`#${i + 1}`, cardW / 2, photoH + cardPad + 30);

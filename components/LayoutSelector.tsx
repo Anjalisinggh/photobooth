@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { LAYOUTS, type LayoutId } from "@/types/photobooth";
 
 interface LayoutSelectorProps {
@@ -13,17 +14,27 @@ export default function LayoutSelector({ value, onChange }: LayoutSelectorProps)
       {LAYOUTS.map((l) => {
         const isActive = value === l.id;
         return (
-          <button
+          <motion.button
             key={l.id}
             type="button"
             onClick={() => onChange(l.id)}
-            className={`flex flex-col items-center gap-2 rounded-2xl border-2 px-3 py-4 transition ${
-              isActive ? "border-ink bg-ink text-cream shadow-stamp-sm" : "border-ink/15 bg-paper text-ink hover:border-ink/40"
+            whileTap={{ scale: 0.95 }}
+            className={`relative flex flex-col items-center gap-2 overflow-hidden rounded-2xl border-2 px-3 py-4 transition-colors ${
+              isActive ? "border-ink text-cream" : "border-ink/15 bg-paper text-ink hover:border-ink/40"
             }`}
           >
-            <LayoutGlyph id={l.id} active={isActive} />
-            <span className="font-label text-[11px] font-semibold tracking-wide">[ {l.tag} ]</span>
-          </button>
+            {isActive && (
+              <motion.span
+                layoutId="layout-active-pill"
+                className="absolute inset-0 bg-ink shadow-stamp-sm"
+                transition={{ type: "spring", stiffness: 380, damping: 32 }}
+              />
+            )}
+            <span className="relative z-10 flex flex-col items-center gap-2">
+              <LayoutGlyph id={l.id} active={isActive} />
+              <span className="font-label text-[11px] font-semibold tracking-wide">[ {l.tag} ]</span>
+            </span>
+          </motion.button>
         );
       })}
     </div>

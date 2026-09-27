@@ -169,7 +169,7 @@ export function defaultCustomization(overrides?: Partial<StripCustomization>): S
   return {
     layout: "strip",
     filter: "original",
-    background: "#F4ECFF",
+    background: "#F2E8D8",
     border: true,
     caption: "the photobooth",
     showDate: true,
