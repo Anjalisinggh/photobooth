@@ -4,8 +4,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import StampFrame from "@/components/StampFrame";
 
-const FRAME_PHOTOS = ["/hero/frame-1.svg", "/hero/frame-2.svg", "/hero/frame-3.svg", "/hero/frame-4.svg"];
-const CYCLE_MS = 2600;
+const FRAME_PHOTOS = Array.from(
+  { length: 12 },
+  (_, i) => `/hero/photos/frame-${String(i + 1).padStart(2, "0")}.jpg`
+);
+const CYCLE_MS = 2200;
 
 /**
  * The landing page's centerpiece: a little photo printer that feeds out a
@@ -50,7 +53,7 @@ export default function HeroBoothCard() {
               <img
                 src={FRAME_PHOTOS[index]}
                 alt="Sample photobooth frame"
-                className="aspect-[4/5] w-full object-cover"
+                className="aspect-[384/359] w-full object-cover"
                 draggable={false}
               />
             </StampFrame>
